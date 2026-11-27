@@ -25,6 +25,8 @@ Je HelloFresh-box in je Homey Pro: bezorgdag, tijdvak, recepten, overgeslagen we
 
 Log in met hetzelfde **e-mailadres en wachtwoord** als in de HelloFresh-app. Je wachtwoord blijft alleen op je eigen Homey en wordt gebruikt om opnieuw in te loggen als HelloFresh je uitlogt.
 
+Blokkeert HelloFresh het inloggen vanaf Homey (je ziet dan een melding over een beveiliging)? Kies **Inloggen via de website**. Je maakt dan één keer een bladwijzer in Safari, logt in op hellofresh.nl, tikt op de bladwijzer en plakt de FreshBox-code in Homey. Daarna ververst FreshBox zelf.
+
 Geen wachtwoord (bijvoorbeeld inloggen met Google of Apple)? Kies dan **Inloggen met een link in je mail**: houd de knop in de mail ingedrukt, kies **Kopieer link** en plak hem in Homey.
 
 Verloopt het inloggen toch, dan wordt het apparaat grijs. Kies dan **Herstellen** en log opnieuw in.

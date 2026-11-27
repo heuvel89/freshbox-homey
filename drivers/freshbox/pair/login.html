@@ -10,7 +10,12 @@
   .fb-link { display: block; width: 100%; margin-top: 10px; padding: 10px; border: 0; background: none; color: #067A46; font-size: 14px; font-weight: 600; }
   .fb-err { background: #FFE1DC; color: #3A1210; border-radius: 12px; padding: 10px 12px; font-size: 13px; margin-top: 12px; display: none; }
   .fb-tip { background: #FFD95A; color: #3D2E00; border-radius: 12px; padding: 10px 12px; font-size: 13px; line-height: 1.4; margin-top: 12px; }
-  .hidden { display: none; }
+  .hidden { display: none !important; }
+  .fb-btn.sec { background: #FFD95A; color: #3D2E00; }
+  .fb-steps { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
+  .fb-s { display: flex; gap: 10px; align-items: flex-start; background: #DFF1C7; color: #1E3A0A; border-radius: 12px; padding: 10px 12px; font-size: 13px; line-height: 1.4; }
+  .fb-s .n { font-style: normal; font-weight: 700; width: 22px; height: 22px; border-radius: 11px; background: #242424; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 12px; }
+  #bm { min-height: 70px; font-size: 11px; margin-top: 8px; }
 </style>
 
 <div class="fb">
@@ -27,7 +32,30 @@
       <option value="BE">België</option>
     </select>
     <button class="fb-btn" id="pwlogin">Inloggen</button>
+    <button class="fb-link" id="useweb">Inloggen via de website</button>
     <button class="fb-link" id="uselink">Inloggen met een link in je mail</button>
+  </div>
+
+  <div id="stepweb" class="hidden">
+    <h2>Inloggen via de website</h2>
+    <p>Lukt inloggen hierboven niet? Dan haal je met een bladwijzer in Safari een FreshBox-code op van hellofresh.nl. De bladwijzer maak je maar één keer.</p>
+    <div class="fb-steps">
+      <div class="fb-s"><i class="n">1</i><span>Tik op <i>Kopieer bladwijzer</i>.</span></div>
+      <div class="fb-s"><i class="n">2</i><span>Open Safari, tik op <i>Deel → Voeg bladwijzer toe</i> en noem hem <i>FreshBox</i>. Open daarna <i>Bladwijzers → Wijzig</i>, tik op FreshBox en vervang het adres door wat je net kopieerde.</span></div>
+      <div class="fb-s"><i class="n">3</i><span>Ga naar <b>hellofresh.nl</b> en log in. Open <i>Bladwijzers</i> en tik op <i>FreshBox</i>. De code wordt gekopieerd.</span></div>
+      <div class="fb-s"><i class="n">4</i><span>Kom terug en plak de code hieronder.</span></div>
+    </div>
+    <button class="fb-btn sec" id="copybm">Kopieer bladwijzer</button>
+    <textarea id="bm" readonly class="hidden"></textarea>
+    <label for="code">FreshBox-code</label>
+    <textarea id="code" placeholder="{&quot;access_token&quot;: …"></textarea>
+    <label for="web-country">Land</label>
+    <select id="web-country">
+      <option value="NL">Nederland</option>
+      <option value="BE">België</option>
+    </select>
+    <button class="fb-btn" id="weblogin">Koppelen</button>
+    <button class="fb-link" id="back0">Terug naar inloggen met wachtwoord</button>
   </div>
 
   <div id="step1" class="hidden">
@@ -62,7 +90,36 @@
   const showError = (e) => { $('err').textContent = (e && e.message) || String(e); $('err').style.display = 'block'; };
   const clearError = () => { $('err').style.display = 'none'; };
 
-  const show = (id) => ['step0', 'step1', 'step2'].forEach((s) => $(s).classList.toggle('hidden', s !== id));
+  const show = (id) => ['step0', 'stepweb', 'step1', 'step2'].forEach((s) => $(s).classList.toggle('hidden', s !== id));
+  const BOOKMARK = "javascript:(function(){var v=null;try{v=localStorage.getItem('apiV2Auth')}catch(e){}if(!v){var m=document.cookie.match(/(?:^|; )apiV2Auth=([^;]*)/);v=m&&decodeURIComponent(m[1])}if(!v){alert('Geen FreshBox-code gevonden. Log eerst in op hellofresh.nl en probeer het opnieuw.');return}var done=function(){alert('FreshBox-code gekopieerd. Plak hem in Homey.')};var show=function(){prompt('Kopieer deze FreshBox-code:',v)};try{navigator.clipboard.writeText(v).then(done,show)}catch(e){show()}})();";
+  $('useweb').addEventListener('click', () => { clearError(); show('stepweb'); });
+  $('back0').addEventListener('click', () => { clearError(); show('step0'); });
+  $('copybm').addEventListener('click', async () => {
+    const box = $('bm');
+    box.value = BOOKMARK;
+    try {
+      await navigator.clipboard.writeText(BOOKMARK);
+      $('copybm').textContent = 'Gekopieerd ✓';
+    } catch (e) {
+      box.classList.remove('hidden');
+      box.focus();
+      box.select();
+      $('copybm').textContent = 'Selecteer en kopieer de tekst hieronder';
+    }
+  });
+  $('weblogin').addEventListener('click', async () => {
+    clearError();
+    $('weblogin').disabled = true;
+    try {
+      const mode = await Homey.emit('token_login', { code: $('code').value, country: $('web-country').value });
+      if (mode === 'repair') Homey.done();
+      else Homey.showView('list_devices');
+    } catch (e) {
+      showError(e);
+    } finally {
+      $('weblogin').disabled = false;
+    }
+  });
   $('uselink').addEventListener('click', () => { clearError(); $('email').value = $('pw-email').value; show('step1'); });
   $('usepw').addEventListener('click', () => { clearError(); show('step0'); });
 

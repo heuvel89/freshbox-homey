@@ -58,6 +58,21 @@ class FreshBoxDriver extends Homey.Driver {
       return onDone({ tokens, info, pending: { email: mail, country: pwApi.country, password } });
     });
 
+    // Inloggen met de code van de HelloFresh-website (als inloggen vanaf Homey geblokkeerd wordt)
+    session.setHandler('token_login', async ({ code, country }) => {
+      const tokenApi = new HelloFreshApi({ country, log: this.log.bind(this) });
+      const tokens = tokenApi.useWebsiteCode(code);
+      let info = {};
+      try {
+        info = await tokenApi.getCustomerInfo() || {};
+      } catch (err) {
+        if (err.auth) throw new Error('HelloFresh accepteert deze code niet (meer). Log opnieuw in op de website en kopieer een nieuwe code.');
+        this.error('Klantgegevens ophalen mislukt', err.message);
+      }
+      const email = info.email || info.username || '';
+      return onDone({ tokens: { accessToken: tokenApi.accessToken, refreshToken: tokenApi.refreshToken || tokens.refreshToken }, info, pending: { email, country: tokenApi.country } });
+    });
+
     session.setHandler('finish_login', async ({ link }) => {
       if (!api || !pending) throw new Error(this.homey.__('pair.start_first'));
       const tokens = await api.finishLogin(link, pending);
@@ -71,7 +86,7 @@ class FreshBoxDriver extends Homey.Driver {
     let found = null;
 
     this._loginHandlers(session, async ({ tokens, info, pending }) => {
-      const id = String(info.uuid || info.id || pending.email).toLowerCase();
+      const id = String(info.uuid || info.id || pending.email || Date.now()).toLowerCase();
       found = {
         name: 'HelloFresh',
         data: { id },
