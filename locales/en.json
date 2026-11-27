@@ -1,7 +1,8 @@
 {
   "pair": {
     "bad_email": "Enter a valid e-mail address",
-    "start_first": "Request a login link first"
+    "start_first": "Request a login link first",
+    "no_password": "Enter your password"
   },
   "device": {
     "login_failed": "HelloFresh login expired. Choose 'Repair' and log in again."

@@ -4,6 +4,6 @@ See when your next box arrives and in which time slot, which recipes are in it a
 
 Works together with the Bring! Shopping List app: the items you need from your own pantry (olive oil, butter…) can go straight onto your Bring! list, automatically or with one tap.
 
-Log in with the e-mail address of your HelloFresh account. HelloFresh sends you a login e-mail; paste the link from that e-mail into Homey. No password needed. Works for HelloFresh Netherlands and Belgium.
+Log in with the e-mail address and password of your HelloFresh account, or with a login link from your e-mail. Works for HelloFresh Netherlands and Belgium.
 
 This app is not made by, endorsed by or affiliated with HelloFresh. It uses the same connection as the HelloFresh website, which is not an official API and may change without notice.

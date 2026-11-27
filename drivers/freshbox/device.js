@@ -43,6 +43,8 @@ class FreshBoxDevice extends Homey.Device {
       country: this.getStoreValue('country') || 'NL',
       accessToken: this.getStoreValue('accessToken'),
       refreshToken: this.getStoreValue('refreshToken'),
+      email: this.getStoreValue('email'),
+      password: this.getStoreValue('password'),
       log: this.log.bind(this),
       onTokens: ({ accessToken, refreshToken }) => {
         this.setStoreValue('accessToken', accessToken).catch(this.error);
@@ -51,7 +53,8 @@ class FreshBoxDevice extends Homey.Device {
     });
   }
 
-  async updateLogin({ accessToken, refreshToken, country, email }) {
+  async updateLogin({ accessToken, refreshToken, country, email, password }) {
+    await this.setStoreValue('password', password || null);
     await this.setStoreValue('accessToken', accessToken);
     await this.setStoreValue('refreshToken', refreshToken);
     await this.setStoreValue('country', country);

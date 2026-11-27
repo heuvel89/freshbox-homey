@@ -1,7 +1,8 @@
 {
   "pair": {
     "bad_email": "Vul een geldig e-mailadres in",
-    "start_first": "Vraag eerst een inloglink aan"
+    "start_first": "Vraag eerst een inloglink aan",
+    "no_password": "Vul je wachtwoord in"
   },
   "device": {
     "login_failed": "Inloggen bij HelloFresh verlopen. Kies 'Herstellen' en log opnieuw in."

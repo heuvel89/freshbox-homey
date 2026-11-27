@@ -23,13 +23,11 @@ Je HelloFresh-box in je Homey Pro: bezorgdag, tijdvak, recepten, overgeslagen we
 
 ## Inloggen
 
-HelloFresh werkt zonder wachtwoord:
+Log in met hetzelfde **e-mailadres en wachtwoord** als in de HelloFresh-app. Je wachtwoord blijft alleen op je eigen Homey en wordt gebruikt om opnieuw in te loggen als HelloFresh je uitlogt.
 
-1. Vul je e-mailadres in. HelloFresh stuurt je een inlogmail.
-2. Tik in de mail **niet** op de knop, maar houd hem ingedrukt en kies **Kopieer link**.
-3. Plak de link in Homey en tik op **Inloggen**.
+Geen wachtwoord (bijvoorbeeld inloggen met Google of Apple)? Kies dan **Inloggen met een link in je mail**: houd de knop in de mail ingedrukt, kies **Kopieer link** en plak hem in Homey.
 
-Verloopt het inloggen ooit, dan wordt het apparaat grijs. Kies dan **Herstellen** en doe dezelfde stappen.
+Verloopt het inloggen toch, dan wordt het apparaat grijs. Kies dan **Herstellen** en log opnieuw in.
 
 ## Samen met Mail Hook
 
@@ -53,4 +51,4 @@ Voorbeeld voor het rolluik:
 
 ## Bedankt
 
-De manier van inloggen en ophalen is gebaseerd op [pyhellofresh](https://github.com/pantherale0/pyhellofresh) van Alberto Montes (MIT-licentie).
+De manier van inloggen en ophalen is gebaseerd op [pyhellofresh](https://github.com/pantherale0/pyhellofresh) van Alberto Montes (MIT-licentie) en op hoe [mcp-hellofresh](https://github.com/JulienA/mcp-hellofresh) inlogt en ververst.

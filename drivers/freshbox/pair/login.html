@@ -14,8 +14,24 @@
 </style>
 
 <div class="fb">
-  <div id="step1">
-    <h2>Je e-mailadres</h2>
+  <div id="step0">
+    <h2>Log in bij HelloFresh</h2>
+    <p>Met hetzelfde e-mailadres en wachtwoord als in de HelloFresh-app.</p>
+    <label for="pw-email">E-mailadres</label>
+    <input id="pw-email" type="email" autocomplete="email" placeholder="naam@voorbeeld.nl" />
+    <label for="pw-pass">Wachtwoord</label>
+    <input id="pw-pass" type="password" autocomplete="current-password" />
+    <label for="pw-country">Land</label>
+    <select id="pw-country">
+      <option value="NL">Nederland</option>
+      <option value="BE">België</option>
+    </select>
+    <button class="fb-btn" id="pwlogin">Inloggen</button>
+    <button class="fb-link" id="uselink">Inloggen met een link in je mail</button>
+  </div>
+
+  <div id="step1" class="hidden">
+    <h2>Inloggen met een link</h2>
     <p>HelloFresh stuurt een inlogmail naar dit adres.</p>
     <label for="email">E-mailadres</label>
     <input id="email" type="email" autocomplete="email" placeholder="naam@voorbeeld.nl" />
@@ -25,6 +41,7 @@
       <option value="BE">België</option>
     </select>
     <button class="fb-btn" id="send">Stuur inlogmail</button>
+    <button class="fb-link" id="usepw">Toch met wachtwoord</button>
   </div>
 
   <div id="step2" class="hidden">
@@ -44,6 +61,24 @@
   const $ = (id) => document.getElementById(id);
   const showError = (e) => { $('err').textContent = (e && e.message) || String(e); $('err').style.display = 'block'; };
   const clearError = () => { $('err').style.display = 'none'; };
+
+  const show = (id) => ['step0', 'step1', 'step2'].forEach((s) => $(s).classList.toggle('hidden', s !== id));
+  $('uselink').addEventListener('click', () => { clearError(); $('email').value = $('pw-email').value; show('step1'); });
+  $('usepw').addEventListener('click', () => { clearError(); show('step0'); });
+
+  $('pwlogin').addEventListener('click', async () => {
+    clearError();
+    $('pwlogin').disabled = true;
+    try {
+      const mode = await Homey.emit('password_login', { email: $('pw-email').value, password: $('pw-pass').value, country: $('pw-country').value });
+      if (mode === 'repair') Homey.done();
+      else Homey.showView('list_devices');
+    } catch (e) {
+      showError(e);
+    } finally {
+      $('pwlogin').disabled = false;
+    }
+  });
 
   $('send').addEventListener('click', async () => {
     clearError();

@@ -46,6 +46,18 @@ class FreshBoxDriver extends Homey.Driver {
       return true;
     });
 
+    // Inloggen met e-mailadres en wachtwoord
+    session.setHandler('password_login', async ({ email, password, country }) => {
+      const mail = String(email || '').trim();
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)) throw new Error(this.homey.__('pair.bad_email'));
+      if (!password) throw new Error(this.homey.__('pair.no_password'));
+      const pwApi = new HelloFreshApi({ country, log: this.log.bind(this) });
+      const tokens = await pwApi.loginPassword(mail, password);
+      let info = {};
+      try { info = await pwApi.getCustomerInfo() || {}; } catch (err) { this.error('Klantgegevens ophalen mislukt', err.message); }
+      return onDone({ tokens, info, pending: { email: mail, country: pwApi.country, password } });
+    });
+
     session.setHandler('finish_login', async ({ link }) => {
       if (!api || !pending) throw new Error(this.homey.__('pair.start_first'));
       const tokens = await api.finishLogin(link, pending);
@@ -68,6 +80,7 @@ class FreshBoxDriver extends Homey.Driver {
           email: pending.email,
           accessToken: tokens.accessToken,
           refreshToken: tokens.refreshToken,
+          password: pending.password || null,
         },
       };
       return 'pair';
@@ -81,7 +94,7 @@ class FreshBoxDriver extends Homey.Driver {
 
   async onRepair(session, device) {
     this._loginHandlers(session, async ({ tokens, pending }) => {
-      await device.updateLogin({ ...tokens, country: pending.country, email: pending.email });
+      await device.updateLogin({ ...tokens, country: pending.country, email: pending.email, password: pending.password || null });
       return 'repair';
     });
   }

@@ -4,6 +4,6 @@ Zie wanneer je volgende box komt en in welk tijdvak, welke recepten erin zitten 
 
 Werkt samen met de app Bring! Boodschappenlijst: wat je zelf in huis moet hebben (olijfolie, boter…) zet FreshBox automatisch of met één tik op je Bring!-lijst.
 
-Log in met het e-mailadres van je HelloFresh-account. HelloFresh stuurt je een inlogmail; plak de link uit die mail in Homey. Geen wachtwoord nodig. Werkt voor HelloFresh Nederland en België.
+Log in met het e-mailadres en wachtwoord van je HelloFresh-account, of met een inloglink uit je mail. Werkt voor HelloFresh Nederland en België.
 
 Deze app is niet gemaakt door, goedgekeurd door of verbonden aan HelloFresh. De app gebruikt dezelfde verbinding als de website van HelloFresh. Dat is geen officiële API en kan zonder aankondiging veranderen.
