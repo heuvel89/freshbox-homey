@@ -1,0 +1,1306 @@
+{
+  "id": "com.heuvel89.freshbox",
+  "version": "0.1.0",
+  "compatibility": ">=12.2.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "FreshBox",
+    "nl": "FreshBox"
+  },
+  "description": {
+    "en": "Your HelloFresh box in Homey: delivery day, time slot and recipes",
+    "nl": "Je HelloFresh-box in Homey: bezorgdag, tijdvak en recepten"
+  },
+  "category": [
+    "tools"
+  ],
+  "tags": {
+    "en": [
+      "hellofresh",
+      "meal kit",
+      "recipes",
+      "delivery",
+      "groceries",
+      "bring"
+    ],
+    "nl": [
+      "hellofresh",
+      "maaltijdbox",
+      "recepten",
+      "bezorging",
+      "boodschappen",
+      "bring"
+    ]
+  },
+  "brandColor": "#067A46",
+  "permissions": [
+    "homey:app:nl.homeyapps.bringlist"
+  ],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "heuvel89"
+  },
+  "support": "https://github.com/heuvel89/freshbox-homey/issues",
+  "source": "https://github.com/heuvel89/freshbox-homey",
+  "api": {
+    "diagnose": {
+      "method": "GET",
+      "path": "/diagnose"
+    }
+  },
+  "capabilities": {
+    "fb_days_until": {
+      "type": "number",
+      "title": {
+        "en": "Days until box",
+        "nl": "Dagen tot box"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/countdown.svg",
+      "units": {
+        "en": "days",
+        "nl": "dagen"
+      },
+      "decimals": 0
+    },
+    "fb_next_delivery": {
+      "type": "string",
+      "title": {
+        "en": "Next box",
+        "nl": "Volgende box"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/calendar.svg"
+    },
+    "fb_next_week": {
+      "type": "string",
+      "title": {
+        "en": "Next week",
+        "nl": "Volgende week"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/week.svg"
+    },
+    "fb_recipes": {
+      "type": "string",
+      "title": {
+        "en": "Recipes",
+        "nl": "Recepten"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/recipe.svg"
+    },
+    "fb_status": {
+      "type": "string",
+      "title": {
+        "en": "Status",
+        "nl": "Status"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/status.svg"
+    },
+    "fb_time_slot": {
+      "type": "string",
+      "title": {
+        "en": "Time slot",
+        "nl": "Tijdvak"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/clock.svg"
+    }
+  },
+  "flow": {
+    "triggers": [
+      {
+        "id": "delivery_tomorrow",
+        "title": {
+          "en": "Delivery is tomorrow",
+          "nl": "Bezorging is morgen"
+        },
+        "hint": {
+          "en": "At the hour set in the device settings (default 19:00).",
+          "nl": "Op het uur uit de apparaatinstellingen (standaard 19:00)."
+        },
+        "tokens": [
+          {
+            "name": "date",
+            "type": "string",
+            "title": {
+              "en": "Date",
+              "nl": "Datum"
+            },
+            "example": {
+              "en": "Tuesday 1 December",
+              "nl": "dinsdag 1 december"
+            }
+          },
+          {
+            "name": "slot",
+            "type": "string",
+            "title": {
+              "en": "Time slot",
+              "nl": "Tijdvak"
+            },
+            "example": "14:00 – 18:00"
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          }
+        ]
+      },
+      {
+        "id": "delivery_day",
+        "title": {
+          "en": "Delivery day has started",
+          "nl": "Bezorgdag is begonnen"
+        },
+        "hint": {
+          "en": "At the hour set in the device settings (default 07:00).",
+          "nl": "Op het uur uit de apparaatinstellingen (standaard 07:00)."
+        },
+        "tokens": [
+          {
+            "name": "date",
+            "type": "string",
+            "title": {
+              "en": "Date",
+              "nl": "Datum"
+            },
+            "example": {
+              "en": "Tuesday 1 December",
+              "nl": "dinsdag 1 december"
+            }
+          },
+          {
+            "name": "slot",
+            "type": "string",
+            "title": {
+              "en": "Time slot",
+              "nl": "Tijdvak"
+            },
+            "example": "14:00 – 18:00"
+          },
+          {
+            "name": "recipes",
+            "type": "string",
+            "title": {
+              "en": "Recipes",
+              "nl": "Recepten"
+            },
+            "example": {
+              "en": "Pasta, Curry, Tacos",
+              "nl": "Pasta, Curry, Taco's"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          }
+        ]
+      },
+      {
+        "id": "slot_starts_in",
+        "title": {
+          "en": "Time slot starts in … minutes",
+          "nl": "Tijdvak begint over … minuten"
+        },
+        "titleFormatted": {
+          "en": "Time slot starts in [[minutes]] minutes",
+          "nl": "Tijdvak begint over [[minutes]] minuten"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          },
+          {
+            "type": "number",
+            "name": "minutes",
+            "title": {
+              "en": "Minutes",
+              "nl": "Minuten"
+            },
+            "min": 0,
+            "max": 360,
+            "placeholder": {
+              "en": "30",
+              "nl": "30"
+            }
+          }
+        ],
+        "tokens": [
+          {
+            "name": "slot",
+            "type": "string",
+            "title": {
+              "en": "Time slot",
+              "nl": "Tijdvak"
+            },
+            "example": "14:00 – 18:00"
+          }
+        ]
+      },
+      {
+        "id": "on_the_way",
+        "title": {
+          "en": "Box is on its way",
+          "nl": "Box is onderweg"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          }
+        ]
+      },
+      {
+        "id": "delivered",
+        "title": {
+          "en": "Box has been delivered",
+          "nl": "Box is bezorgd"
+        },
+        "tokens": [
+          {
+            "name": "time",
+            "type": "string",
+            "title": {
+              "en": "Time",
+              "nl": "Tijd"
+            },
+            "example": "15:10"
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          }
+        ]
+      },
+      {
+        "id": "status_changed",
+        "title": {
+          "en": "Status changed",
+          "nl": "Status is veranderd"
+        },
+        "tokens": [
+          {
+            "name": "status",
+            "type": "string",
+            "title": {
+              "en": "Status",
+              "nl": "Status"
+            },
+            "example": {
+              "en": "On its way",
+              "nl": "Onderweg"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          }
+        ]
+      },
+      {
+        "id": "week_skipped",
+        "title": {
+          "en": "A week was skipped",
+          "nl": "Er is een week overgeslagen"
+        },
+        "tokens": [
+          {
+            "name": "week",
+            "type": "number",
+            "title": {
+              "en": "Week number",
+              "nl": "Weeknummer"
+            },
+            "example": 50
+          },
+          {
+            "name": "date",
+            "type": "string",
+            "title": {
+              "en": "Date",
+              "nl": "Datum"
+            },
+            "example": {
+              "en": "Tue 8 Dec",
+              "nl": "di 8 dec"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          }
+        ]
+      },
+      {
+        "id": "new_recipes",
+        "title": {
+          "en": "New recipes are final",
+          "nl": "Nieuwe recepten bekend"
+        },
+        "hint": {
+          "en": "When the recipes of your next box are final (after the menu deadline).",
+          "nl": "Zodra de recepten van je volgende box vastliggen (na de deadline voor het menu)."
+        },
+        "tokens": [
+          {
+            "name": "week",
+            "type": "number",
+            "title": {
+              "en": "Week number",
+              "nl": "Weeknummer"
+            },
+            "example": 49
+          },
+          {
+            "name": "recipes",
+            "type": "string",
+            "title": {
+              "en": "Recipes",
+              "nl": "Recepten"
+            },
+            "example": {
+              "en": "Pasta, Curry, Tacos",
+              "nl": "Pasta, Curry, Taco's"
+            }
+          },
+          {
+            "name": "pantry",
+            "type": "string",
+            "title": {
+              "en": "From your pantry",
+              "nl": "Zelf in huis"
+            },
+            "example": {
+              "en": "Olive oil, Butter",
+              "nl": "Olijfolie, Boter"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          }
+        ]
+      },
+      {
+        "id": "menu_closes_in",
+        "title": {
+          "en": "Menu choice closes in … hours",
+          "nl": "Menu kiezen sluit over … uur"
+        },
+        "titleFormatted": {
+          "en": "Menu choice closes in [[hours]] hours",
+          "nl": "Menu kiezen sluit over [[hours]] uur"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          },
+          {
+            "type": "number",
+            "name": "hours",
+            "title": {
+              "en": "Hours",
+              "nl": "Uren"
+            },
+            "min": 1,
+            "max": 168,
+            "placeholder": {
+              "en": "24",
+              "nl": "24"
+            }
+          }
+        ],
+        "tokens": [
+          {
+            "name": "week",
+            "type": "number",
+            "title": {
+              "en": "Week number",
+              "nl": "Weeknummer"
+            },
+            "example": 51
+          },
+          {
+            "name": "deadline",
+            "type": "string",
+            "title": {
+              "en": "Deadline",
+              "nl": "Deadline"
+            },
+            "example": {
+              "en": "Wed 2 Dec 23:59",
+              "nl": "wo 2 dec 23:59"
+            }
+          }
+        ]
+      }
+    ],
+    "conditions": [
+      {
+        "id": "is_delivery_day",
+        "title": {
+          "en": "Today !{{is|is not}} delivery day",
+          "nl": "Vandaag !{{is|is geen}} bezorgdag"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          }
+        ]
+      },
+      {
+        "id": "is_week_skipped",
+        "title": {
+          "en": "Week !{{is|is not}} skipped",
+          "nl": "Week !{{is|is niet}} overgeslagen"
+        },
+        "titleFormatted": {
+          "en": "[[which]] !{{is|is not}} skipped",
+          "nl": "[[which]] !{{is|is niet}} overgeslagen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          },
+          {
+            "type": "dropdown",
+            "name": "which",
+            "title": {
+              "en": "Week",
+              "nl": "Week"
+            },
+            "values": [
+              {
+                "id": "this",
+                "label": {
+                  "en": "This week",
+                  "nl": "Deze week"
+                }
+              },
+              {
+                "id": "next",
+                "label": {
+                  "en": "Next week",
+                  "nl": "Volgende week"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "within_slot",
+        "title": {
+          "en": "It !{{is|is not}} within the time slot",
+          "nl": "Het !{{is|is niet}} binnen het tijdvak"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          }
+        ]
+      },
+      {
+        "id": "delivery_within",
+        "title": {
+          "en": "Delivery !{{is|is not}} within … days",
+          "nl": "Bezorging !{{is|is niet}} binnen … dagen"
+        },
+        "titleFormatted": {
+          "en": "Delivery !{{is|is not}} within [[days]] days",
+          "nl": "Bezorging !{{is|is niet}} binnen [[days]] dagen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          },
+          {
+            "type": "number",
+            "name": "days",
+            "title": {
+              "en": "Days",
+              "nl": "Dagen"
+            },
+            "min": 0,
+            "max": 14,
+            "placeholder": {
+              "en": "2",
+              "nl": "2"
+            }
+          }
+        ]
+      },
+      {
+        "id": "box_outside",
+        "title": {
+          "en": "Box !{{is|is not}} outside",
+          "nl": "Box !{{staat|staat niet}} buiten"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          }
+        ]
+      },
+      {
+        "id": "delivered_today",
+        "title": {
+          "en": "Box !{{has|has not}} been delivered today",
+          "nl": "Box !{{is|is niet}} vandaag bezorgd"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "refresh",
+        "title": {
+          "en": "Refresh now",
+          "nl": "Gegevens nu verversen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          }
+        ]
+      },
+      {
+        "id": "set_status",
+        "title": {
+          "en": "Set status to …",
+          "nl": "Zet status op …"
+        },
+        "titleFormatted": {
+          "en": "Set status to [[status]]",
+          "nl": "Zet status op [[status]]"
+        },
+        "hint": {
+          "en": "Handy with the Mail Hook app: use the HelloFresh delivery e-mails.",
+          "nl": "Handig met de app Mail Hook: gebruik de bezorgmails van HelloFresh."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          },
+          {
+            "type": "dropdown",
+            "name": "status",
+            "title": {
+              "en": "Status",
+              "nl": "Status"
+            },
+            "values": [
+              {
+                "id": "on_the_way",
+                "label": {
+                  "en": "On its way",
+                  "nl": "Onderweg"
+                }
+              },
+              {
+                "id": "delivered",
+                "label": {
+                  "en": "Delivered",
+                  "nl": "Bezorgd"
+                }
+              },
+              {
+                "id": "scheduled",
+                "label": {
+                  "en": "Scheduled (reset)",
+                  "nl": "Gepland (terugzetten)"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "box_inside",
+        "title": {
+          "en": "Box is inside",
+          "nl": "Box is binnen gezet"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          }
+        ]
+      },
+      {
+        "id": "recipes_text",
+        "title": {
+          "en": "Make recipe text for …",
+          "nl": "Maak receptentekst van …"
+        },
+        "titleFormatted": {
+          "en": "Make recipe text for [[which]]",
+          "nl": "Maak receptentekst van [[which]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          },
+          {
+            "type": "dropdown",
+            "name": "which",
+            "title": {
+              "en": "Week",
+              "nl": "Week"
+            },
+            "values": [
+              {
+                "id": "box",
+                "label": {
+                  "en": "Next box",
+                  "nl": "Volgende box"
+                }
+              },
+              {
+                "id": "this",
+                "label": {
+                  "en": "This week",
+                  "nl": "Deze week"
+                }
+              },
+              {
+                "id": "next",
+                "label": {
+                  "en": "Next week",
+                  "nl": "Volgende week"
+                }
+              }
+            ]
+          }
+        ],
+        "tokens": [
+          {
+            "name": "text",
+            "type": "string",
+            "title": {
+              "en": "Recipes",
+              "nl": "Recepten"
+            },
+            "example": {
+              "en": "Pasta, Curry, Tacos",
+              "nl": "Pasta, Curry, Taco's"
+            }
+          },
+          {
+            "name": "pantry",
+            "type": "string",
+            "title": {
+              "en": "From your pantry",
+              "nl": "Zelf in huis"
+            },
+            "example": {
+              "en": "Olive oil, Butter",
+              "nl": "Olijfolie, Boter"
+            }
+          },
+          {
+            "name": "count",
+            "type": "number",
+            "title": {
+              "en": "Number of recipes",
+              "nl": "Aantal recepten"
+            },
+            "example": 3
+          }
+        ]
+      },
+      {
+        "id": "pantry_to_bring",
+        "title": {
+          "en": "Put pantry items of … on Bring!",
+          "nl": "Zet 'zelf in huis' van … op Bring!"
+        },
+        "titleFormatted": {
+          "en": "Put pantry items of [[which]] on Bring!",
+          "nl": "Zet 'zelf in huis' van [[which]] op Bring!"
+        },
+        "hint": {
+          "en": "Needs the Bring! Shopping List app. Items already on the list are skipped.",
+          "nl": "Werkt met de app Bring! Boodschappenlijst. Wat al op de lijst staat, wordt overgeslagen."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=freshbox"
+          },
+          {
+            "type": "dropdown",
+            "name": "which",
+            "title": {
+              "en": "Week",
+              "nl": "Week"
+            },
+            "values": [
+              {
+                "id": "box",
+                "label": {
+                  "en": "Next box",
+                  "nl": "Volgende box"
+                }
+              },
+              {
+                "id": "this",
+                "label": {
+                  "en": "This week",
+                  "nl": "Deze week"
+                }
+              },
+              {
+                "id": "next",
+                "label": {
+                  "en": "Next week",
+                  "nl": "Volgende week"
+                }
+              }
+            ]
+          }
+        ],
+        "tokens": [
+          {
+            "name": "added",
+            "type": "string",
+            "title": {
+              "en": "Added",
+              "nl": "Toegevoegd"
+            },
+            "example": {
+              "en": "Olive oil, Butter",
+              "nl": "Olijfolie, Boter"
+            }
+          },
+          {
+            "name": "count",
+            "type": "number",
+            "title": {
+              "en": "Number added",
+              "nl": "Aantal toegevoegd"
+            },
+            "example": 2
+          }
+        ]
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "id": "freshbox",
+      "name": {
+        "en": "HelloFresh account",
+        "nl": "HelloFresh-account"
+      },
+      "class": "other",
+      "capabilities": [
+        "fb_status",
+        "fb_next_delivery",
+        "fb_time_slot",
+        "fb_days_until",
+        "fb_next_week",
+        "fb_recipes",
+        "alarm_generic",
+        "button.box_inside",
+        "button.refresh"
+      ],
+      "capabilitiesOptions": {
+        "alarm_generic": {
+          "title": {
+            "en": "Box is outside",
+            "nl": "Box staat buiten"
+          }
+        },
+        "button.box_inside": {
+          "title": {
+            "en": "Box is inside",
+            "nl": "Box is binnen"
+          },
+          "maintenanceAction": false
+        },
+        "button.refresh": {
+          "title": {
+            "en": "Refresh now",
+            "nl": "Nu bijwerken"
+          },
+          "maintenanceAction": true
+        }
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/freshbox/assets/images/small.png",
+        "large": "/drivers/freshbox/assets/images/large.png",
+        "xlarge": "/drivers/freshbox/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "intro"
+        },
+        {
+          "id": "login",
+          "navigation": {
+            "prev": "intro"
+          }
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "repair": [
+        {
+          "id": "login"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Updates",
+            "nl": "Bijwerken"
+          },
+          "children": [
+            {
+              "id": "poll_normal",
+              "type": "number",
+              "label": {
+                "en": "Normally every (minutes)",
+                "nl": "Normaal elke (minuten)"
+              },
+              "value": 60,
+              "min": 15,
+              "max": 360
+            },
+            {
+              "id": "poll_day",
+              "type": "number",
+              "label": {
+                "en": "On delivery day every (minutes)",
+                "nl": "Op de bezorgdag elke (minuten)"
+              },
+              "value": 15,
+              "min": 5,
+              "max": 120
+            },
+            {
+              "id": "tomorrow_hour",
+              "type": "number",
+              "label": {
+                "en": "'Delivery is tomorrow' at (hour)",
+                "nl": "'Bezorging is morgen' om (uur)"
+              },
+              "value": 19,
+              "min": 0,
+              "max": 23
+            },
+            {
+              "id": "day_hour",
+              "type": "number",
+              "label": {
+                "en": "'Delivery day has started' at (hour)",
+                "nl": "'Bezorgdag is begonnen' om (uur)"
+              },
+              "value": 7,
+              "min": 0,
+              "max": 23,
+              "hint": {
+                "en": "Tip: not too early if this opens your roller shutter.",
+                "nl": "Tip: niet te vroeg als hiermee je rolluik opengaat."
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Bring! shopping list",
+            "nl": "Bring!-boodschappenlijst"
+          },
+          "children": [
+            {
+              "id": "bring_auto",
+              "type": "checkbox",
+              "label": {
+                "en": "Add pantry items automatically",
+                "nl": "'Zelf in huis' automatisch toevoegen"
+              },
+              "value": true,
+              "hint": {
+                "en": "When the recipes of your next box are final. Needs the Bring! Shopping List app on this Homey.",
+                "nl": "Zodra de recepten van je volgende box vastliggen. Werkt met de app Bring! Boodschappenlijst op deze Homey."
+              }
+            },
+            {
+              "id": "always_have",
+              "type": "text",
+              "label": {
+                "en": "Always in the house (skip)",
+                "nl": "Altijd in huis (overslaan)"
+              },
+              "value": "zout, peper",
+              "hint": {
+                "en": "Comma separated. Items containing one of these words are never added.",
+                "nl": "Gescheiden door komma's. Producten met een van deze woorden komen nooit op de lijst."
+              }
+            },
+            {
+              "id": "bring_spec",
+              "type": "text",
+              "label": {
+                "en": "Note on the item",
+                "nl": "Omschrijving bij het product"
+              },
+              "value": "HelloFresh"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "widgets": {
+    "box_outside": {
+      "name": {
+        "en": "Box outside",
+        "nl": "Box staat buiten"
+      },
+      "height": 170,
+      "transparent": true,
+      "settings": [
+        {
+          "id": "device",
+          "type": "autocomplete",
+          "title": {
+            "en": "HelloFresh account",
+            "nl": "HelloFresh-account"
+          }
+        }
+      ],
+      "api": {
+        "getData": {
+          "method": "GET",
+          "path": "/"
+        },
+        "action": {
+          "method": "POST",
+          "path": "/action"
+        }
+      },
+      "id": "box_outside"
+    },
+    "countdown": {
+      "name": {
+        "en": "Countdown",
+        "nl": "Aftellen"
+      },
+      "height": 170,
+      "transparent": true,
+      "settings": [
+        {
+          "id": "device",
+          "type": "autocomplete",
+          "title": {
+            "en": "HelloFresh account",
+            "nl": "HelloFresh-account"
+          }
+        }
+      ],
+      "api": {
+        "getData": {
+          "method": "GET",
+          "path": "/"
+        },
+        "action": {
+          "method": "POST",
+          "path": "/action"
+        }
+      },
+      "id": "countdown"
+    },
+    "delivery_live": {
+      "name": {
+        "en": "Delivery live",
+        "nl": "Levertijd live"
+      },
+      "height": 170,
+      "transparent": true,
+      "settings": [
+        {
+          "id": "device",
+          "type": "autocomplete",
+          "title": {
+            "en": "HelloFresh account",
+            "nl": "HelloFresh-account"
+          }
+        }
+      ],
+      "api": {
+        "getData": {
+          "method": "GET",
+          "path": "/"
+        },
+        "action": {
+          "method": "POST",
+          "path": "/action"
+        }
+      },
+      "id": "delivery_live"
+    },
+    "menu_deadline": {
+      "name": {
+        "en": "Choose menu",
+        "nl": "Menu kiezen"
+      },
+      "height": 170,
+      "transparent": true,
+      "settings": [
+        {
+          "id": "device",
+          "type": "autocomplete",
+          "title": {
+            "en": "HelloFresh account",
+            "nl": "HelloFresh-account"
+          }
+        }
+      ],
+      "api": {
+        "getData": {
+          "method": "GET",
+          "path": "/"
+        },
+        "action": {
+          "method": "POST",
+          "path": "/action"
+        }
+      },
+      "id": "menu_deadline"
+    },
+    "next_week": {
+      "name": {
+        "en": "Next week",
+        "nl": "Volgende week"
+      },
+      "height": 170,
+      "transparent": true,
+      "settings": [
+        {
+          "id": "device",
+          "type": "autocomplete",
+          "title": {
+            "en": "HelloFresh account",
+            "nl": "HelloFresh-account"
+          }
+        }
+      ],
+      "api": {
+        "getData": {
+          "method": "GET",
+          "path": "/"
+        },
+        "action": {
+          "method": "POST",
+          "path": "/action"
+        }
+      },
+      "id": "next_week"
+    },
+    "pantry": {
+      "name": {
+        "en": "From your pantry",
+        "nl": "Zelf in huis"
+      },
+      "height": 210,
+      "transparent": true,
+      "settings": [
+        {
+          "id": "device",
+          "type": "autocomplete",
+          "title": {
+            "en": "HelloFresh account",
+            "nl": "HelloFresh-account"
+          }
+        }
+      ],
+      "api": {
+        "getData": {
+          "method": "GET",
+          "path": "/"
+        },
+        "action": {
+          "method": "POST",
+          "path": "/action"
+        }
+      },
+      "id": "pantry"
+    },
+    "statusbar": {
+      "name": {
+        "en": "Status bar",
+        "nl": "Statusbalk"
+      },
+      "height": 56,
+      "transparent": true,
+      "settings": [
+        {
+          "id": "device",
+          "type": "autocomplete",
+          "title": {
+            "en": "HelloFresh account",
+            "nl": "HelloFresh-account"
+          }
+        }
+      ],
+      "api": {
+        "getData": {
+          "method": "GET",
+          "path": "/"
+        },
+        "action": {
+          "method": "POST",
+          "path": "/action"
+        }
+      },
+      "id": "statusbar"
+    },
+    "this_week": {
+      "name": {
+        "en": "This week",
+        "nl": "Deze week"
+      },
+      "height": 330,
+      "transparent": true,
+      "settings": [
+        {
+          "id": "device",
+          "type": "autocomplete",
+          "title": {
+            "en": "HelloFresh account",
+            "nl": "HelloFresh-account"
+          }
+        }
+      ],
+      "api": {
+        "getData": {
+          "method": "GET",
+          "path": "/"
+        },
+        "action": {
+          "method": "POST",
+          "path": "/action"
+        }
+      },
+      "id": "this_week"
+    },
+    "weeks": {
+      "name": {
+        "en": "Upcoming weeks",
+        "nl": "Komende weken"
+      },
+      "height": 150,
+      "transparent": true,
+      "settings": [
+        {
+          "id": "device",
+          "type": "autocomplete",
+          "title": {
+            "en": "HelloFresh account",
+            "nl": "HelloFresh-account"
+          }
+        }
+      ],
+      "api": {
+        "getData": {
+          "method": "GET",
+          "path": "/"
+        },
+        "action": {
+          "method": "POST",
+          "path": "/action"
+        }
+      },
+      "id": "weeks"
+    }
+  }
+}

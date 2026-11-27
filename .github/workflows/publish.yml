@@ -1,0 +1,40 @@
+name: Publiceren naar Homey (test)
+
+# Start handmatig: GitHub → Actions → "Publiceren naar Homey (test)" → Run workflow
+on:
+  workflow_dispatch:
+    inputs:
+      changelog:
+        description: 'Wat is er nieuw? (komt in de changelog)'
+        required: false
+        default: 'Verbeteringen'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Elke keer een nieuw versienummer: 1.0.<nummer van deze run>
+      - name: Versienummer ophogen
+        run: |
+          VERSION="1.0.${{ github.run_number }}"
+          jq --arg v "$VERSION" '.version = $v' .homeycompose/app.json > tmp.json && mv tmp.json .homeycompose/app.json
+          jq --arg v "$VERSION" '.version = $v' app.json > tmp.json && mv tmp.json app.json
+          jq --arg v "$VERSION" '.version = $v' package.json > tmp.json && mv tmp.json package.json
+          jq -n --arg v "$VERSION" --arg c "${{ github.event.inputs.changelog }}" '{($v): {en: $c, nl: $c}}' > .homeychangelog.json
+          echo "Versie $VERSION"
+
+      - name: App controleren
+        uses: athombv/github-action-homey-app-validate@master
+        with:
+          level: publish
+
+      - name: Publiceren
+        id: publish
+        uses: athombv/github-action-homey-app-publish@master
+        with:
+          personal_access_token: ${{ secrets.HOMEY_PAT }}
+
+      - name: Klaar
+        run: echo "Beheer je app op ${{ steps.publish.outputs.url }} en zet hem daar op Test."

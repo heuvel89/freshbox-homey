@@ -1,0 +1,58 @@
+{
+  "id": "com.heuvel89.freshbox",
+  "version": "0.1.0",
+  "compatibility": ">=12.2.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "FreshBox",
+    "nl": "FreshBox"
+  },
+  "description": {
+    "en": "Your HelloFresh box in Homey: delivery day, time slot and recipes",
+    "nl": "Je HelloFresh-box in Homey: bezorgdag, tijdvak en recepten"
+  },
+  "category": [
+    "tools"
+  ],
+  "tags": {
+    "en": [
+      "hellofresh",
+      "meal kit",
+      "recipes",
+      "delivery",
+      "groceries",
+      "bring"
+    ],
+    "nl": [
+      "hellofresh",
+      "maaltijdbox",
+      "recepten",
+      "bezorging",
+      "boodschappen",
+      "bring"
+    ]
+  },
+  "brandColor": "#067A46",
+  "permissions": [
+    "homey:app:nl.homeyapps.bringlist"
+  ],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "heuvel89"
+  },
+  "support": "https://github.com/heuvel89/freshbox-homey/issues",
+  "source": "https://github.com/heuvel89/freshbox-homey",
+  "api": {
+    "diagnose": {
+      "method": "GET",
+      "path": "/diagnose"
+    }
+  }
+}

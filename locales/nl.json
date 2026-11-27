@@ -1,0 +1,13 @@
+{
+  "pair": {
+    "bad_email": "Vul een geldig e-mailadres in",
+    "start_first": "Vraag eerst een inloglink aan"
+  },
+  "device": {
+    "login_failed": "Inloggen bij HelloFresh verlopen. Kies 'Herstellen' en log opnieuw in."
+  },
+  "bring": {
+    "not_installed": "De app Bring! Boodschappenlijst staat niet op deze Homey",
+    "failed": "Bring! reageert niet"
+  }
+}

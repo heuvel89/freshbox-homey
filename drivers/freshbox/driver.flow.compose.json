@@ -1,0 +1,602 @@
+{
+  "triggers": [
+    {
+      "id": "delivery_tomorrow",
+      "title": {
+        "en": "Delivery is tomorrow",
+        "nl": "Bezorging is morgen"
+      },
+      "hint": {
+        "en": "At the hour set in the device settings (default 19:00).",
+        "nl": "Op het uur uit de apparaatinstellingen (standaard 19:00)."
+      },
+      "tokens": [
+        {
+          "name": "date",
+          "type": "string",
+          "title": {
+            "en": "Date",
+            "nl": "Datum"
+          },
+          "example": {
+            "en": "Tuesday 1 December",
+            "nl": "dinsdag 1 december"
+          }
+        },
+        {
+          "name": "slot",
+          "type": "string",
+          "title": {
+            "en": "Time slot",
+            "nl": "Tijdvak"
+          },
+          "example": "14:00 – 18:00"
+        }
+      ]
+    },
+    {
+      "id": "delivery_day",
+      "title": {
+        "en": "Delivery day has started",
+        "nl": "Bezorgdag is begonnen"
+      },
+      "hint": {
+        "en": "At the hour set in the device settings (default 07:00).",
+        "nl": "Op het uur uit de apparaatinstellingen (standaard 07:00)."
+      },
+      "tokens": [
+        {
+          "name": "date",
+          "type": "string",
+          "title": {
+            "en": "Date",
+            "nl": "Datum"
+          },
+          "example": {
+            "en": "Tuesday 1 December",
+            "nl": "dinsdag 1 december"
+          }
+        },
+        {
+          "name": "slot",
+          "type": "string",
+          "title": {
+            "en": "Time slot",
+            "nl": "Tijdvak"
+          },
+          "example": "14:00 – 18:00"
+        },
+        {
+          "name": "recipes",
+          "type": "string",
+          "title": {
+            "en": "Recipes",
+            "nl": "Recepten"
+          },
+          "example": {
+            "en": "Pasta, Curry, Tacos",
+            "nl": "Pasta, Curry, Taco's"
+          }
+        }
+      ]
+    },
+    {
+      "id": "slot_starts_in",
+      "title": {
+        "en": "Time slot starts in … minutes",
+        "nl": "Tijdvak begint over … minuten"
+      },
+      "titleFormatted": {
+        "en": "Time slot starts in [[minutes]] minutes",
+        "nl": "Tijdvak begint over [[minutes]] minuten"
+      },
+      "args": [
+        {
+          "type": "number",
+          "name": "minutes",
+          "title": {
+            "en": "Minutes",
+            "nl": "Minuten"
+          },
+          "min": 0,
+          "max": 360,
+          "placeholder": {
+            "en": "30",
+            "nl": "30"
+          }
+        }
+      ],
+      "tokens": [
+        {
+          "name": "slot",
+          "type": "string",
+          "title": {
+            "en": "Time slot",
+            "nl": "Tijdvak"
+          },
+          "example": "14:00 – 18:00"
+        }
+      ]
+    },
+    {
+      "id": "on_the_way",
+      "title": {
+        "en": "Box is on its way",
+        "nl": "Box is onderweg"
+      }
+    },
+    {
+      "id": "delivered",
+      "title": {
+        "en": "Box has been delivered",
+        "nl": "Box is bezorgd"
+      },
+      "tokens": [
+        {
+          "name": "time",
+          "type": "string",
+          "title": {
+            "en": "Time",
+            "nl": "Tijd"
+          },
+          "example": "15:10"
+        }
+      ]
+    },
+    {
+      "id": "status_changed",
+      "title": {
+        "en": "Status changed",
+        "nl": "Status is veranderd"
+      },
+      "tokens": [
+        {
+          "name": "status",
+          "type": "string",
+          "title": {
+            "en": "Status",
+            "nl": "Status"
+          },
+          "example": {
+            "en": "On its way",
+            "nl": "Onderweg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "week_skipped",
+      "title": {
+        "en": "A week was skipped",
+        "nl": "Er is een week overgeslagen"
+      },
+      "tokens": [
+        {
+          "name": "week",
+          "type": "number",
+          "title": {
+            "en": "Week number",
+            "nl": "Weeknummer"
+          },
+          "example": 50
+        },
+        {
+          "name": "date",
+          "type": "string",
+          "title": {
+            "en": "Date",
+            "nl": "Datum"
+          },
+          "example": {
+            "en": "Tue 8 Dec",
+            "nl": "di 8 dec"
+          }
+        }
+      ]
+    },
+    {
+      "id": "new_recipes",
+      "title": {
+        "en": "New recipes are final",
+        "nl": "Nieuwe recepten bekend"
+      },
+      "hint": {
+        "en": "When the recipes of your next box are final (after the menu deadline).",
+        "nl": "Zodra de recepten van je volgende box vastliggen (na de deadline voor het menu)."
+      },
+      "tokens": [
+        {
+          "name": "week",
+          "type": "number",
+          "title": {
+            "en": "Week number",
+            "nl": "Weeknummer"
+          },
+          "example": 49
+        },
+        {
+          "name": "recipes",
+          "type": "string",
+          "title": {
+            "en": "Recipes",
+            "nl": "Recepten"
+          },
+          "example": {
+            "en": "Pasta, Curry, Tacos",
+            "nl": "Pasta, Curry, Taco's"
+          }
+        },
+        {
+          "name": "pantry",
+          "type": "string",
+          "title": {
+            "en": "From your pantry",
+            "nl": "Zelf in huis"
+          },
+          "example": {
+            "en": "Olive oil, Butter",
+            "nl": "Olijfolie, Boter"
+          }
+        }
+      ]
+    },
+    {
+      "id": "menu_closes_in",
+      "title": {
+        "en": "Menu choice closes in … hours",
+        "nl": "Menu kiezen sluit over … uur"
+      },
+      "titleFormatted": {
+        "en": "Menu choice closes in [[hours]] hours",
+        "nl": "Menu kiezen sluit over [[hours]] uur"
+      },
+      "args": [
+        {
+          "type": "number",
+          "name": "hours",
+          "title": {
+            "en": "Hours",
+            "nl": "Uren"
+          },
+          "min": 1,
+          "max": 168,
+          "placeholder": {
+            "en": "24",
+            "nl": "24"
+          }
+        }
+      ],
+      "tokens": [
+        {
+          "name": "week",
+          "type": "number",
+          "title": {
+            "en": "Week number",
+            "nl": "Weeknummer"
+          },
+          "example": 51
+        },
+        {
+          "name": "deadline",
+          "type": "string",
+          "title": {
+            "en": "Deadline",
+            "nl": "Deadline"
+          },
+          "example": {
+            "en": "Wed 2 Dec 23:59",
+            "nl": "wo 2 dec 23:59"
+          }
+        }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "id": "is_delivery_day",
+      "title": {
+        "en": "Today !{{is|is not}} delivery day",
+        "nl": "Vandaag !{{is|is geen}} bezorgdag"
+      }
+    },
+    {
+      "id": "is_week_skipped",
+      "title": {
+        "en": "Week !{{is|is not}} skipped",
+        "nl": "Week !{{is|is niet}} overgeslagen"
+      },
+      "titleFormatted": {
+        "en": "[[which]] !{{is|is not}} skipped",
+        "nl": "[[which]] !{{is|is niet}} overgeslagen"
+      },
+      "args": [
+        {
+          "type": "dropdown",
+          "name": "which",
+          "title": {
+            "en": "Week",
+            "nl": "Week"
+          },
+          "values": [
+            {
+              "id": "this",
+              "label": {
+                "en": "This week",
+                "nl": "Deze week"
+              }
+            },
+            {
+              "id": "next",
+              "label": {
+                "en": "Next week",
+                "nl": "Volgende week"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "within_slot",
+      "title": {
+        "en": "It !{{is|is not}} within the time slot",
+        "nl": "Het !{{is|is niet}} binnen het tijdvak"
+      }
+    },
+    {
+      "id": "delivery_within",
+      "title": {
+        "en": "Delivery !{{is|is not}} within … days",
+        "nl": "Bezorging !{{is|is niet}} binnen … dagen"
+      },
+      "titleFormatted": {
+        "en": "Delivery !{{is|is not}} within [[days]] days",
+        "nl": "Bezorging !{{is|is niet}} binnen [[days]] dagen"
+      },
+      "args": [
+        {
+          "type": "number",
+          "name": "days",
+          "title": {
+            "en": "Days",
+            "nl": "Dagen"
+          },
+          "min": 0,
+          "max": 14,
+          "placeholder": {
+            "en": "2",
+            "nl": "2"
+          }
+        }
+      ]
+    },
+    {
+      "id": "box_outside",
+      "title": {
+        "en": "Box !{{is|is not}} outside",
+        "nl": "Box !{{staat|staat niet}} buiten"
+      }
+    },
+    {
+      "id": "delivered_today",
+      "title": {
+        "en": "Box !{{has|has not}} been delivered today",
+        "nl": "Box !{{is|is niet}} vandaag bezorgd"
+      }
+    }
+  ],
+  "actions": [
+    {
+      "id": "refresh",
+      "title": {
+        "en": "Refresh now",
+        "nl": "Gegevens nu verversen"
+      }
+    },
+    {
+      "id": "set_status",
+      "title": {
+        "en": "Set status to …",
+        "nl": "Zet status op …"
+      },
+      "titleFormatted": {
+        "en": "Set status to [[status]]",
+        "nl": "Zet status op [[status]]"
+      },
+      "hint": {
+        "en": "Handy with the Mail Hook app: use the HelloFresh delivery e-mails.",
+        "nl": "Handig met de app Mail Hook: gebruik de bezorgmails van HelloFresh."
+      },
+      "args": [
+        {
+          "type": "dropdown",
+          "name": "status",
+          "title": {
+            "en": "Status",
+            "nl": "Status"
+          },
+          "values": [
+            {
+              "id": "on_the_way",
+              "label": {
+                "en": "On its way",
+                "nl": "Onderweg"
+              }
+            },
+            {
+              "id": "delivered",
+              "label": {
+                "en": "Delivered",
+                "nl": "Bezorgd"
+              }
+            },
+            {
+              "id": "scheduled",
+              "label": {
+                "en": "Scheduled (reset)",
+                "nl": "Gepland (terugzetten)"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "box_inside",
+      "title": {
+        "en": "Box is inside",
+        "nl": "Box is binnen gezet"
+      }
+    },
+    {
+      "id": "recipes_text",
+      "title": {
+        "en": "Make recipe text for …",
+        "nl": "Maak receptentekst van …"
+      },
+      "titleFormatted": {
+        "en": "Make recipe text for [[which]]",
+        "nl": "Maak receptentekst van [[which]]"
+      },
+      "args": [
+        {
+          "type": "dropdown",
+          "name": "which",
+          "title": {
+            "en": "Week",
+            "nl": "Week"
+          },
+          "values": [
+            {
+              "id": "box",
+              "label": {
+                "en": "Next box",
+                "nl": "Volgende box"
+              }
+            },
+            {
+              "id": "this",
+              "label": {
+                "en": "This week",
+                "nl": "Deze week"
+              }
+            },
+            {
+              "id": "next",
+              "label": {
+                "en": "Next week",
+                "nl": "Volgende week"
+              }
+            }
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "text",
+          "type": "string",
+          "title": {
+            "en": "Recipes",
+            "nl": "Recepten"
+          },
+          "example": {
+            "en": "Pasta, Curry, Tacos",
+            "nl": "Pasta, Curry, Taco's"
+          }
+        },
+        {
+          "name": "pantry",
+          "type": "string",
+          "title": {
+            "en": "From your pantry",
+            "nl": "Zelf in huis"
+          },
+          "example": {
+            "en": "Olive oil, Butter",
+            "nl": "Olijfolie, Boter"
+          }
+        },
+        {
+          "name": "count",
+          "type": "number",
+          "title": {
+            "en": "Number of recipes",
+            "nl": "Aantal recepten"
+          },
+          "example": 3
+        }
+      ]
+    },
+    {
+      "id": "pantry_to_bring",
+      "title": {
+        "en": "Put pantry items of … on Bring!",
+        "nl": "Zet 'zelf in huis' van … op Bring!"
+      },
+      "titleFormatted": {
+        "en": "Put pantry items of [[which]] on Bring!",
+        "nl": "Zet 'zelf in huis' van [[which]] op Bring!"
+      },
+      "hint": {
+        "en": "Needs the Bring! Shopping List app. Items already on the list are skipped.",
+        "nl": "Werkt met de app Bring! Boodschappenlijst. Wat al op de lijst staat, wordt overgeslagen."
+      },
+      "args": [
+        {
+          "type": "dropdown",
+          "name": "which",
+          "title": {
+            "en": "Week",
+            "nl": "Week"
+          },
+          "values": [
+            {
+              "id": "box",
+              "label": {
+                "en": "Next box",
+                "nl": "Volgende box"
+              }
+            },
+            {
+              "id": "this",
+              "label": {
+                "en": "This week",
+                "nl": "Deze week"
+              }
+            },
+            {
+              "id": "next",
+              "label": {
+                "en": "Next week",
+                "nl": "Volgende week"
+              }
+            }
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "added",
+          "type": "string",
+          "title": {
+            "en": "Added",
+            "nl": "Toegevoegd"
+          },
+          "example": {
+            "en": "Olive oil, Butter",
+            "nl": "Olijfolie, Boter"
+          }
+        },
+        {
+          "name": "count",
+          "type": "number",
+          "title": {
+            "en": "Number added",
+            "nl": "Aantal toegevoegd"
+          },
+          "example": 2
+        }
+      ]
+    }
+  ]
+}

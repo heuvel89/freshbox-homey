@@ -1,0 +1,28 @@
+{
+  "name": {
+    "en": "Next week",
+    "nl": "Volgende week"
+  },
+  "height": 170,
+  "transparent": true,
+  "settings": [
+    {
+      "id": "device",
+      "type": "autocomplete",
+      "title": {
+        "en": "HelloFresh account",
+        "nl": "HelloFresh-account"
+      }
+    }
+  ],
+  "api": {
+    "getData": {
+      "method": "GET",
+      "path": "/"
+    },
+    "action": {
+      "method": "POST",
+      "path": "/action"
+    }
+  }
+}

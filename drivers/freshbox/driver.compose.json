@@ -1,0 +1,181 @@
+{
+  "name": {
+    "en": "HelloFresh account",
+    "nl": "HelloFresh-account"
+  },
+  "class": "other",
+  "capabilities": [
+    "fb_status",
+    "fb_next_delivery",
+    "fb_time_slot",
+    "fb_days_until",
+    "fb_next_week",
+    "fb_recipes",
+    "alarm_generic",
+    "button.box_inside",
+    "button.refresh"
+  ],
+  "capabilitiesOptions": {
+    "alarm_generic": {
+      "title": {
+        "en": "Box is outside",
+        "nl": "Box staat buiten"
+      }
+    },
+    "button.box_inside": {
+      "title": {
+        "en": "Box is inside",
+        "nl": "Box is binnen"
+      },
+      "maintenanceAction": false
+    },
+    "button.refresh": {
+      "title": {
+        "en": "Refresh now",
+        "nl": "Nu bijwerken"
+      },
+      "maintenanceAction": true
+    }
+  },
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "cloud"
+  ],
+  "images": {
+    "small": "{{driverAssetsPath}}/images/small.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+  },
+  "pair": [
+    {
+      "id": "intro"
+    },
+    {
+      "id": "login",
+      "navigation": {
+        "prev": "intro"
+      }
+    },
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "repair": [
+    {
+      "id": "login"
+    }
+  ],
+  "settings": [
+    {
+      "type": "group",
+      "label": {
+        "en": "Updates",
+        "nl": "Bijwerken"
+      },
+      "children": [
+        {
+          "id": "poll_normal",
+          "type": "number",
+          "label": {
+            "en": "Normally every (minutes)",
+            "nl": "Normaal elke (minuten)"
+          },
+          "value": 60,
+          "min": 15,
+          "max": 360
+        },
+        {
+          "id": "poll_day",
+          "type": "number",
+          "label": {
+            "en": "On delivery day every (minutes)",
+            "nl": "Op de bezorgdag elke (minuten)"
+          },
+          "value": 15,
+          "min": 5,
+          "max": 120
+        },
+        {
+          "id": "tomorrow_hour",
+          "type": "number",
+          "label": {
+            "en": "'Delivery is tomorrow' at (hour)",
+            "nl": "'Bezorging is morgen' om (uur)"
+          },
+          "value": 19,
+          "min": 0,
+          "max": 23
+        },
+        {
+          "id": "day_hour",
+          "type": "number",
+          "label": {
+            "en": "'Delivery day has started' at (hour)",
+            "nl": "'Bezorgdag is begonnen' om (uur)"
+          },
+          "value": 7,
+          "min": 0,
+          "max": 23,
+          "hint": {
+            "en": "Tip: not too early if this opens your roller shutter.",
+            "nl": "Tip: niet te vroeg als hiermee je rolluik opengaat."
+          }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "label": {
+        "en": "Bring! shopping list",
+        "nl": "Bring!-boodschappenlijst"
+      },
+      "children": [
+        {
+          "id": "bring_auto",
+          "type": "checkbox",
+          "label": {
+            "en": "Add pantry items automatically",
+            "nl": "'Zelf in huis' automatisch toevoegen"
+          },
+          "value": true,
+          "hint": {
+            "en": "When the recipes of your next box are final. Needs the Bring! Shopping List app on this Homey.",
+            "nl": "Zodra de recepten van je volgende box vastliggen. Werkt met de app Bring! Boodschappenlijst op deze Homey."
+          }
+        },
+        {
+          "id": "always_have",
+          "type": "text",
+          "label": {
+            "en": "Always in the house (skip)",
+            "nl": "Altijd in huis (overslaan)"
+          },
+          "value": "zout, peper",
+          "hint": {
+            "en": "Comma separated. Items containing one of these words are never added.",
+            "nl": "Gescheiden door komma's. Producten met een van deze woorden komen nooit op de lijst."
+          }
+        },
+        {
+          "id": "bring_spec",
+          "type": "text",
+          "label": {
+            "en": "Note on the item",
+            "nl": "Omschrijving bij het product"
+          },
+          "value": "HelloFresh"
+        }
+      ]
+    }
+  ]
+}

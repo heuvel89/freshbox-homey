@@ -1,0 +1,30 @@
+<style>
+  .fb { font-family: inherit; padding: 8px 4px; color: inherit; }
+  .fb-logo { width: 76px; height: 76px; margin: 4px auto 10px; display: block; }
+  .fb-title { text-align: center; font-size: 21px; font-weight: 700; margin: 0; }
+  .fb-sub { text-align: center; font-size: 14px; opacity: .7; margin: 4px 0 16px; }
+  .fb-step { display: flex; gap: 12px; align-items: flex-start; border-radius: 14px; padding: 12px 14px; margin-bottom: 8px; }
+  .fb-step:nth-child(1) { background: #DFF1C7; color: #1E3A0A; }
+  .fb-step:nth-child(2) { background: #FFD95A; color: #3D2E00; }
+  .fb-step:nth-child(3) { background: #FFE1DC; color: #3A1210; }
+  .fb-n { width: 28px; height: 28px; border-radius: 14px; background: #242424; color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px; }
+  .fb-step b { display: block; font-size: 15px; }
+  .fb-step span { font-size: 13px; line-height: 1.4; }
+  .fb-btn { display: block; width: 100%; margin-top: 14px; padding: 13px; border: 0; border-radius: 26px; background: #067A46; color: #fff; font-size: 16px; font-weight: 700; }
+  .fb-small { text-align: center; font-size: 11px; opacity: .6; margin-top: 12px; line-height: 1.4; }
+</style>
+
+<div class="fb">
+  <img class="fb-logo" src="../assets/icon-color.svg" alt="" />
+  <p class="fb-title">FreshBox</p>
+  <p class="fb-sub">Koppel je HelloFresh-account</p>
+
+  <div>
+    <div class="fb-step"><div class="fb-n">1</div><div><b>Vul je e-mailadres in</b><span>Hetzelfde adres als in de HelloFresh-app. HelloFresh stuurt je dan een inlogmail.</span></div></div>
+    <div class="fb-step"><div class="fb-n">2</div><div><b>Kopieer de knop uit de mail</b><span>Tik níet op de knop, maar houd hem ingedrukt en kies <i>Kopieer link</i>.</span></div></div>
+    <div class="fb-step"><div class="fb-n">3</div><div><b>Plak de link hier</b><span>Klaar. Een wachtwoord is niet nodig.</span></div></div>
+  </div>
+
+  <button class="fb-btn" onclick="Homey.nextView()">Volgende</button>
+  <p class="fb-small">Onofficiële app, niet gemaakt door HelloFresh. Je inloggegevens blijven op je eigen Homey.</p>
+</div>

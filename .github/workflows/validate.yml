@@ -1,0 +1,15 @@
+name: Controleren
+
+# Controleert de app bij elke wijziging, zonder te publiceren
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: athombv/github-action-homey-app-validate@master
+        with:
+          level: publish

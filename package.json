@@ -1,0 +1,9 @@
+{
+  "name": "com.heuvel89.freshbox",
+  "version": "0.1.0",
+  "description": "FreshBox: je HelloFresh-box in Homey (onofficieel)",
+  "main": "app.js",
+  "license": "MIT",
+  "engines": { "node": ">=18" },
+  "dependencies": {}
+}

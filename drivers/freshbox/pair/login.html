@@ -1,0 +1,81 @@
+<style>
+  .fb { font-family: inherit; padding: 8px 4px; color: inherit; }
+  .fb h2 { font-size: 20px; font-weight: 700; margin: 4px 0 6px; }
+  .fb p { font-size: 14px; line-height: 1.45; opacity: .8; margin: 0 0 14px; }
+  .fb label { display: block; font-size: 13px; font-weight: 600; margin: 12px 0 6px; }
+  .fb input, .fb select, .fb textarea { width: 100%; box-sizing: border-box; border: 1px solid rgba(128,128,128,.4); border-radius: 12px; padding: 12px; font: inherit; font-size: 15px; background: transparent; color: inherit; }
+  .fb textarea { min-height: 96px; resize: vertical; font-size: 13px; }
+  .fb-btn { display: block; width: 100%; margin-top: 16px; padding: 13px; border: 0; border-radius: 26px; background: #067A46; color: #fff; font-size: 16px; font-weight: 700; }
+  .fb-btn:disabled { opacity: .5; }
+  .fb-link { display: block; width: 100%; margin-top: 10px; padding: 10px; border: 0; background: none; color: #067A46; font-size: 14px; font-weight: 600; }
+  .fb-err { background: #FFE1DC; color: #3A1210; border-radius: 12px; padding: 10px 12px; font-size: 13px; margin-top: 12px; display: none; }
+  .fb-tip { background: #FFD95A; color: #3D2E00; border-radius: 12px; padding: 10px 12px; font-size: 13px; line-height: 1.4; margin-top: 12px; }
+  .hidden { display: none; }
+</style>
+
+<div class="fb">
+  <div id="step1">
+    <h2>Je e-mailadres</h2>
+    <p>HelloFresh stuurt een inlogmail naar dit adres.</p>
+    <label for="email">E-mailadres</label>
+    <input id="email" type="email" autocomplete="email" placeholder="naam@voorbeeld.nl" />
+    <label for="country">Land</label>
+    <select id="country">
+      <option value="NL">Nederland</option>
+      <option value="BE">België</option>
+    </select>
+    <button class="fb-btn" id="send">Stuur inlogmail</button>
+  </div>
+
+  <div id="step2" class="hidden">
+    <h2>Plak de link uit de mail</h2>
+    <p>Open de mail van HelloFresh. Houd de knop <b>Inloggen</b> ingedrukt, kies <i>Kopieer link</i> en plak hem hieronder.</p>
+    <label for="link">Inloglink</label>
+    <textarea id="link" placeholder="https://…"></textarea>
+    <div class="fb-tip">Per ongeluk op de knop getikt? Dan is de link soms al gebruikt. Vraag dan een nieuwe mail aan.</div>
+    <button class="fb-btn" id="finish">Inloggen</button>
+    <button class="fb-link" id="again">Nieuwe mail sturen</button>
+  </div>
+
+  <div class="fb-err" id="err"></div>
+</div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const showError = (e) => { $('err').textContent = (e && e.message) || String(e); $('err').style.display = 'block'; };
+  const clearError = () => { $('err').style.display = 'none'; };
+
+  $('send').addEventListener('click', async () => {
+    clearError();
+    $('send').disabled = true;
+    try {
+      await Homey.emit('start_login', { email: $('email').value, country: $('country').value });
+      $('step1').classList.add('hidden');
+      $('step2').classList.remove('hidden');
+    } catch (e) {
+      showError(e);
+    } finally {
+      $('send').disabled = false;
+    }
+  });
+
+  $('again').addEventListener('click', () => {
+    clearError();
+    $('step2').classList.add('hidden');
+    $('step1').classList.remove('hidden');
+  });
+
+  $('finish').addEventListener('click', async () => {
+    clearError();
+    $('finish').disabled = true;
+    try {
+      const mode = await Homey.emit('finish_login', { link: $('link').value });
+      if (mode === 'repair') Homey.done();
+      else Homey.showView('list_devices');
+    } catch (e) {
+      showError(e);
+    } finally {
+      $('finish').disabled = false;
+    }
+  });
+</script>

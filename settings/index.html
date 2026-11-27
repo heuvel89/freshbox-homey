@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+<style>
+  body { font-family: -apple-system, system-ui, sans-serif; padding: 4px; }
+  h1 { font-size: 20px; margin: 0 0 6px; }
+  p { font-size: 14px; line-height: 1.45; opacity: .8; }
+  button { border: 0; border-radius: 22px; padding: 11px 18px; font-size: 15px; font-weight: 600; background: #067A46; color: #fff; margin: 4px 6px 8px 0; }
+  button.alt { background: #FFD95A; color: #3D2E00; }
+  pre { background: rgba(128,128,128,.12); border-radius: 12px; padding: 10px; font-size: 11px; white-space: pre-wrap; word-break: break-all; max-height: 420px; overflow: auto; }
+  .note { background: #DFF1C7; color: #1E3A0A; border-radius: 12px; padding: 10px 12px; font-size: 13px; }
+</style>
+</head>
+<body>
+  <h1>FreshBox</h1>
+  <p>Klopt er iets niet, zoals het tijdvak of "zelf in huis"? Haal hier de gegevens op die HelloFresh terugstuurt en stuur ze naar de maker. Namen, adressen, e-mail en tokens worden weggelaten.</p>
+  <button id="load">Gegevens ophalen</button>
+  <button id="copy" class="alt">Kopiëren</button>
+  <div class="note">Instellingen zoals hoe vaak de app bijwerkt en Bring! vind je bij het apparaat: Apparaten → HelloFresh → tandwiel.</div>
+  <pre id="out">Nog niets opgehaald.</pre>
+<script>
+  function onHomeyReady(Homey) {
+    const out = document.getElementById('out');
+    document.getElementById('load').addEventListener('click', () => {
+      out.textContent = 'Ophalen…';
+      Homey.api('GET', '/diagnose', null, (err, data) => {
+        out.textContent = err ? `Fout: ${err.message || err}` : JSON.stringify(data, null, 2);
+      });
+    });
+    document.getElementById('copy').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(out.textContent);
+        Homey.alert('Gekopieerd');
+      } catch (e) {
+        const r = document.createRange();
+        r.selectNodeContents(out);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(r);
+        Homey.alert('Tekst is geselecteerd: kopieer hem met de knop van je telefoon.');
+      }
+    });
+    Homey.ready();
+  }
+</script>
+</body>
+</html>

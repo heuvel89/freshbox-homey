@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<style>
+  :root { --g: #067A46; --lime: #99CC33; --sun: #FFD95A; --mint: #DFF1C7; --coral: #FF8A65; --pink: #FFE1DC;
+          --red: #C93A32; --ink: #242424; --cream: #FBF7EE; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: transparent; font-family: var(--homey-font-family, -apple-system, system-ui, sans-serif); color: var(--ink); }
+  .t { border-radius: 22px; padding: 16px; height: 100%; display: flex; flex-direction: column; gap: 8px; overflow: hidden; position: relative; isolation: isolate; }
+  .lab { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .pill { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 12px; white-space: nowrap; letter-spacing: 0; text-transform: none; }
+  .msg { flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; opacity: .8; padding: 8px; }
+  .big { font-size: 26px; font-weight: 800; line-height: 1.1; }
+  .sub { font-size: 13px; line-height: 1.35; }
+  .muted { opacity: .75; }
+  .btn { border: 0; border-radius: 20px; height: 40px; padding: 0 14px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+  .btn:active { transform: scale(.97); }
+  .btn.busy { opacity: .6; pointer-events: none; }
+  .dot { position: absolute; border-radius: 50%; z-index: -1; }
+  .ico { width: 18px; height: 18px; flex-shrink: 0; }
+  .g { background: var(--g); color: #fff; } .lime { background: var(--lime); color: var(--ink); }
+  .sun { background: var(--sun); color: #3D2E00; } .mint { background: var(--mint); color: #1E3A0A; }
+  .coral { background: var(--coral); color: #2E0E04; } .pink { background: var(--pink); color: #3A1210; }
+  .white { background: #fff; color: var(--ink); } .redc { background: var(--red); color: #fff; } .dark { background: var(--ink); color: #fff; }
+</style>
+</head>
+<body>
+<div id="root"><div class="t white"><div class="msg">Laden…</div></div></div>
+<script>
+  const HEIGHT = 170;
+  const AUTO = false;
+
+  let H = null; let deviceId = null; let lastData = null;
+  const $root = () => document.getElementById('root');
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const SVG = (p, s = 18, c = 'currentColor') => `<svg class="ico" viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="${c}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const IC = {
+    clock: SVG('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+    box: SVG('<path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>'),
+    plus: SVG('<path d="M12 5v14M5 12h14"/>'),
+    check: SVG('<path d="M5 12.5l4.5 4.5L19 7.5"/>'),
+    bowl: SVG('<path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M9 7c0-2 2-2 2-4M14 7c0-2 2-2 2-4"/>'),
+    refresh: SVG('<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/>'),
+  };
+  const TINTS = ['var(--mint)', 'var(--sun)', 'var(--pink)', '#E6F2CF', '#FFE8A3'];
+  function thumb(r, i, size) {
+    const bg = TINTS[i % TINTS.length];
+    const img = r.image ? `<img src="${esc(r.image)}" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.remove()">` : '';
+    return `<div style="width:${size}px;height:${size}px;border-radius:12px;background:${bg};flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative"><span style="position:absolute">${IC.bowl}</span><span style="position:relative;width:100%;height:100%">${img}</span></div>`;
+  }
+  const mins = (r) => [r.minutes ? `${r.minutes} min` : '', r.difficulty || ''].filter(Boolean).join(' · ');
+
+  function draw(d) {
+    lastData = d;
+    const root = $root();
+    if (!d) { root.innerHTML = `<div class="t white"><div class="msg">Voeg eerst je HelloFresh-account toe in Homey</div></div>`; return; }
+    if (d.loading) { root.innerHTML = `<div class="t white"><div class="msg">Gegevens ophalen…</div></div>`; return; }
+    root.innerHTML = render(d);
+    root.querySelectorAll('[data-a]').forEach((b) => b.addEventListener('click', () => act(b)));
+    fit();
+  }
+
+  function fit() {
+    if (!H || typeof AUTO === 'undefined' || !AUTO) return;
+    const el = $root().firstElementChild;
+    if (!el) return;
+    el.style.height = 'auto';
+    const h = Math.ceil(el.getBoundingClientRect().height);
+    el.style.height = '';
+    $root().style.height = `${h}px`;
+    try { H.setHeight(h); } catch (e) { /* oudere Homey */ }
+  }
+
+  async function load() {
+    try {
+      draw(await H.api('GET', deviceId ? `/?id=${encodeURIComponent(deviceId)}` : '/'));
+    } catch (e) {
+      $root().innerHTML = `<div class="t white"><div class="msg">${esc(e.message || e)}</div></div>`;
+    }
+  }
+
+  async function act(btn) {
+    btn.classList.add('busy');
+    const old = btn.innerHTML;
+    try {
+      const res = await H.api('POST', '/action', { id: deviceId, action: btn.dataset.a, which: btn.dataset.w });
+      if (btn.dataset.a === 'bring') btn.innerHTML = `${IC.check} ${res && res.count ? `${res.count} toegevoegd` : 'Stond er al op'}`;
+      else btn.innerHTML = `${IC.check} Gedaan`;
+    } catch (e) {
+      btn.textContent = e.message || 'Mislukt';
+    }
+    setTimeout(() => { btn.innerHTML = old; btn.classList.remove('busy'); load(); }, 2500);
+  }
+
+  function onHomeyReady(Homey) {
+    H = Homey;
+    const settings = Homey.getSettings() || {};
+    deviceId = settings.device && settings.device.id ? settings.device.id : null;
+    $root().style.height = `${HEIGHT}px`;
+    load().then(() => Homey.ready({ height: AUTO ? Math.ceil($root().getBoundingClientRect().height) || HEIGHT : HEIGHT }));
+    setInterval(load, 60000);
+    try { Homey.on('update', load); } catch (e) { /* oudere Homey */ }
+  }
+
+
+  function render(d) {
+    const m = d.menuOpen;
+    if (!m) return `<div class="t sun"><div class="lab">Menu kiezen</div><div class="msg">Geen open menu gevonden</div></div>`;
+    const left = m.hoursLeft < 48 ? `nog ${m.hoursLeft} uur` : `nog ${Math.floor(m.hoursLeft / 24)} dagen`;
+    return `<div class="t sun"><div class="lab">Menu kiezen<span class="pill dark">${esc(left)}</span></div>
+      <div class="big" style="font-size:22px">Kies je recepten voor week ${esc(m.weekNo)}</div>
+      <div class="sub" style="font-weight:700">vóór ${esc(m.label)}</div></div>`;
+  }
+</script>
+</body>
+</html>

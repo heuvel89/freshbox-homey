@@ -1,0 +1,13 @@
+{
+  "pair": {
+    "bad_email": "Enter a valid e-mail address",
+    "start_first": "Request a login link first"
+  },
+  "device": {
+    "login_failed": "HelloFresh login expired. Choose 'Repair' and log in again."
+  },
+  "bring": {
+    "not_installed": "The Bring! Shopping List app is not installed on this Homey",
+    "failed": "Bring! does not respond"
+  }
+}
